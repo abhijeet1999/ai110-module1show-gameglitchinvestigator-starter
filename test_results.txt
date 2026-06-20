@@ -1,0 +1,14 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.9.6, pytest-8.4.2, pluggy-1.6.0 -- .venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/abhijeetcherungottil/Desktop/Codepath/ai110-module1show-gameglitchinvestigator-starter
+collecting ... collected 6 items
+
+tests/test_game_logic.py::test_winning_guess PASSED                      [ 16%]
+tests/test_game_logic.py::test_guess_too_high PASSED                     [ 33%]
+tests/test_game_logic.py::test_guess_too_low PASSED                      [ 50%]
+tests/test_game_logic.py::test_high_hint_direction PASSED                [ 66%]
+tests/test_game_logic.py::test_low_hint_direction PASSED                 [ 83%]
+tests/test_game_logic.py::test_even_attempt_no_string_coercion PASSED    [100%]
+
+============================== 6 passed in 0.04s ==============================

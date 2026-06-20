@@ -47,6 +47,8 @@ A bug wasn't really fixed until two things were true: the pytest suite passed an
 
 - How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
 
+Every time you interact with a Streamlit app — click a button, type in a box, change a slider — Streamlit re-executes the entire Python script from top to bottom. That means every variable you declare normally gets reset to its initial value on every interaction, as if the script just started. `st.session_state` is the fix: it's a dictionary-like object that Streamlit keeps alive across those reruns, so values you store in it (like the secret number, the attempt count, or the score) persist between clicks. The bug in the original app was that `random.randint()` was called outside of a `if "secret" not in st.session_state` guard in some places, which meant a new secret could be generated on each rerun — making the game literally unwinnable because the target kept moving. Once I understood that the whole script re-runs on every click, the session state pattern made complete sense: only generate or reset a value when you explicitly mean to, and store everything the game needs to remember inside `st.session_state`.
+
 ---
 
 ## 5. Looking ahead: your developer habits
@@ -55,3 +57,10 @@ A bug wasn't really fixed until two things were true: the pytest suite passed an
   - This could be a testing habit, a prompting strategy, or a way you used Git.
 - What is one thing you would do differently next time you work with AI on a coding task?
 - In one or two sentences, describe how this project changed the way you think about AI generated code.
+
+The habit I want to keep is writing a regression test immediately after finding a bug, before touching the code. On this project, I first wrote `test_even_attempt_no_string_coercion` to capture the exact input that broke the game (an even attempt number where the secret was coerced to a string), confirmed it would fail against the old code, then fixed the bug and watched the test go green. That sequence — red test first, then fix — made me certain the fix addressed the real root cause rather than masking it. In future labs I want to do the same for every discovered bug rather than just running the app manually and hoping it looks right.
+
+Next time I work with AI on a debugging task I would ask it to show me the specific line of code it suspects is wrong *before* asking it to fix anything. On this project the AI jumped straight to suggesting fixes before I had confirmed whether my own mental model of the bug was correct; slowing down and using the AI as a code-reader first (not a code-writer) would have saved a round-trip.
+
+This project taught me that AI-generated code is often subtly wrong in ways that look right on the surface — the `check_guess` function in the original `app.py` was syntactically valid and even ran without crashing, but its logic was broken in a way that only showed up under a specific runtime condition (even-numbered attempts). I now treat any AI-generated logic function as a first draft that needs a human-written test to verify it actually does what the name implies, not just what the code looks like it does.
+
